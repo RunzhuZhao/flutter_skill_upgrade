@@ -54,29 +54,34 @@ class AirQualityGaugePainter extends CustomPainter {
     final radius = size.width / 2 - 20;
     final startAngle = degreesToRadians(135); // -225 degrees to radians
     final sweepAngle = degreesToRadians(270); // 270 degrees to radians
-// + math.pi * 2
+
+// 定义渐变
+    final colors = [
+      Color(0xff6DCFAB),
+      Color(0xffEDD061),
+      Color(0xffF3A864),
+      Color(0xffF1977E),
+      Color(0xffD56565),
+      Color(0xffBA5D5D),
+      Color(0xff6DCFAB), // Closing the loop for gradient
+    ];
+    final stops = [
+      45 / 360,
+      90 / 360,
+      135 / 360,
+      180 / 360,
+      225 / 360,
+      270 / 360,
+      1.0,
+    ];
+    final startAngle1 = degreesToRadians(135);
+    final endAngle1 = degreesToRadians(495);
     final gradient = SweepGradient(
       tileMode: TileMode.repeated,
-      startAngle: degreesToRadians(125),
-      endAngle: degreesToRadians(485),
-      colors: [
-        Color(0xff6DCFAB),
-        Color(0xffEDD061),
-        Color(0xffF3A864),
-        Color(0xffF1977E),
-        Color(0xffD56565),
-        Color(0xffBA5D5D), // Closing the loop for gradient
-      ],
-      stops: [
-        45 / 360,
-        90 / 360,
-        135 / 360,
-        180 / 360,
-        225 / 360,
-        270 / 360,
-      ],
-      // transform: GradientRotation(
-      //     degreesToRadians(135)), // Rotate gradient to start from top center
+      startAngle: startAngle,
+      endAngle: endAngle1,
+      colors: colors,
+      stops: stops,
     );
 
     final paint = Paint()
@@ -84,7 +89,7 @@ class AirQualityGaugePainter extends CustomPainter {
           gradient.createShader(Rect.fromCircle(center: center, radius: 150))
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 15;
+      ..strokeWidth = 9;
 
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: 150),
@@ -95,7 +100,28 @@ class AirQualityGaugePainter extends CustomPainter {
     );
 
     _drawLabels(canvas, size, radius);
-    // _drawIndicator(canvas, size, 150, 82); // Air quality value
+
+    double targetAngle = degreesToRadians(180);
+    Color colorAtAngle =
+        getColorAtAngle(targetAngle, colors, stops, startAngle1, endAngle1);
+    _drawIndicator(canvas, size, 150, 82, colorAtAngle); // Air quality value
+    // 绘制一个小圆表示指定角度的颜色
+    // final markerPaint = Paint()..color = colorAtAngle;
+    // canvas.drawCircle(Offset(size.width / 2, size.height / 2), 10, markerPaint);
+  }
+
+  Color getColorAtAngle(double angle, List<Color> colors, List<double> stops,
+      double startAngle, double endAngle) {
+    double totalAngle = endAngle - startAngle;
+    double normalizedAngle = (angle - startAngle) / totalAngle;
+
+    for (int i = 0; i < stops.length - 1; i++) {
+      if (normalizedAngle >= stops[i] && normalizedAngle <= stops[i + 1]) {
+        double t = (normalizedAngle - stops[i]) / (stops[i + 1] - stops[i]);
+        return Color.lerp(colors[i], colors[i + 1], t)!;
+      }
+    }
+    return colors.last;
   }
 
   void _drawLabels(Canvas canvas, Size size, double radius) {
@@ -127,9 +153,10 @@ class AirQualityGaugePainter extends CustomPainter {
     }
   }
 
-  void _drawIndicator(Canvas canvas, Size size, double radius, double value) {
+  void _drawIndicator(
+      Canvas canvas, Size size, double radius, double value, Color color) {
     final indicatorPaint = Paint()
-      ..color = Colors.orange
+      ..color = color
       ..style = PaintingStyle.fill;
 
     final normalizedValue = (value / 500).clamp(0.0, 1.0);
@@ -138,7 +165,7 @@ class AirQualityGaugePainter extends CustomPainter {
     final x = size.width / 2 + radius * math.cos(angle);
     final y = size.height / 2 + radius * math.sin(angle);
 
-    canvas.drawCircle(Offset(x, y), 10, indicatorPaint);
+    canvas.drawCircle(Offset(x, y), 8.5, indicatorPaint);
   }
 
   double degreesToRadians(double degrees) {
