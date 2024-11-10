@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-void main() {
-  runApp(AirQualityGaugeApp());
-}
-
 class AirQualityGaugeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
