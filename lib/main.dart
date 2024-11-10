@@ -1,4 +1,4 @@
-import 'package:flutter_skill_upgrade/higelighted_text.dart';
+import 'package:flutter_skill_upgrade/demos/higelighted_text.dart';
 import 'package:flutter/material.dart';
 
 void main() {
