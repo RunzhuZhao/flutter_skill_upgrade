@@ -1,5 +1,10 @@
-import 'package:flutter_skill_upgrade/demos/higelighted_text.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter_skill_upgrade/demos/chat_type_effect.dart';
+import 'package:flutter_skill_upgrade/demos/fleixable_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_skill_upgrade/demos/guide.dart';
+import 'package:flutter_skill_upgrade/demos/ruler_slider.dart';
+import 'package:flutter_skill_upgrade/demos/type_effect.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +16,29 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return HighlightedTextPage();
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // TRY THIS: Try running your application with "flutter run". You'll see
+        // the application has a purple toolbar. Then, without quitting the app,
+        // try changing the seedColor in the colorScheme below to Colors.green
+        // and then invoke "hot reload" (save your changes or press the "hot
+        // reload" button in a Flutter-supported IDE, or press "r" if you used
+        // the command line to start the app).
+        //
+        // Notice that the counter didn't reset back to zero; the application
+        // state is not lost during the reload. To reset the state, use hot
+        // restart instead.
+        //
+        // This works for code too, not just values: Most code changes can be
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
   }
 }
 
@@ -91,6 +118,27 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            itemWidget('弹性列表', () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const FlexiableListPage(),
+              ));
+            }),
+            SizedBox(
+              height: 10,
+            ),
+            itemWidget('引导', () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => GuidePage(),
+              ));
+            }),
+            SizedBox(
+              height: 10,
+            ),
+            ConversationWidget(),
+            SizedBox(
+              height: 10,
+            ),
+            // RulerSlider(),
           ],
         ),
       ),
@@ -99,6 +147,13 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Widget itemWidget(String title, VoidCallback? onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(title),
     );
   }
 }
