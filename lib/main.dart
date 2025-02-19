@@ -3,6 +3,8 @@ import 'package:flutter_skill_upgrade/demos/chat_type_effect.dart';
 import 'package:flutter_skill_upgrade/demos/fleixable_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_skill_upgrade/demos/guide.dart';
+import 'package:flutter_skill_upgrade/demos/mask_shader_demo.dart';
+import 'package:flutter_skill_upgrade/demos/paint_song.dart';
 import 'package:flutter_skill_upgrade/demos/ruler_slider.dart';
 import 'package:flutter_skill_upgrade/demos/type_effect.dart';
 
@@ -138,6 +140,11 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
               height: 10,
             ),
+            itemWidget('蒙版', () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ImageShaderExample(),
+              ));
+            }),
             // RulerSlider(),
           ],
         ),
