@@ -47,7 +47,7 @@ class _ImageShaderExampleState extends State<ImageShaderExample> {
             tileMode: TileMode.mirror, // 定义渐变边缘如何处理
           ).createShader(bounds); // 创建着色器并返回
         },
-        blendMode: BlendMode.srcIn, // 用渐变颜色覆盖文字
+        blendMode: BlendMode.dstIn, // 用渐变颜色覆盖文字
         child: Container(
           // color: Colors.white,
           width: 200,
@@ -76,19 +76,19 @@ class _ImageShaderExampleState extends State<ImageShaderExample> {
           child: ShaderMask(
             shaderCallback: (Rect bounds) {
               return LinearGradient(
-                colors: [Colors.black, Colors.black, Colors.black],
+                colors: [Colors.yellow, Colors.pink, Colors.purple],
                 // stops: [0.0, 1.0],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ).createShader(bounds);
             },
-            blendMode: BlendMode.srcOut, // 用渐变颜色覆盖文字
+            blendMode: BlendMode.srcIn, // 用渐变颜色覆盖文字
             // child: Image.asset('assets/good.png'),
             child: Container(
               color: Colors.transparent,
               child: Text(
                 'Hello ShaderMask!',
-                style: TextStyle(fontSize: 30, color: Colors.transparent),
+                style: TextStyle(fontSize: 30, color: Colors.white),
               ),
             ),
           ),
